@@ -1,8 +1,6 @@
 from HPAPROX.dataIO import read_all, read, Data
 import matplotlib.pyplot as plt
 from numpy import linspace
-import threading
-import multiprocessing
 
 
 def interpolate_point(data: [Data], xi):
