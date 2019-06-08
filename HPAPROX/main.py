@@ -3,16 +3,17 @@ import matplotlib.pyplot as plt
 from numpy import linspace
 
 
-def interpolate_point_lagrange(data: [Data], xi):
+def interpolate_point_lagrange(xi, data: [Data]):
     result: float = 0.0
     length = len(data)
     for i in range(length):
         term: float = data[i].y
         for j in range(length):
             if i != j:
-                term = term * (xi - data[j].x)/float(data[i].x - data[j].x)
+                term *= (xi - data[j].x)/float(data[i].x - data[j].x)
         result += term
 
+    print("Interpolated point", xi)
     return result
 
 
@@ -22,29 +23,34 @@ def interpolate_lagrange(data: [Data], interpolation_range=None) -> [Data]:
 
     lin_x = linspace(data[0].x, data[-1].x, interpolation_range)
 
-    return [Data(lin_x[i], interpolate_point_lagrange(data, i)) for i in range(interpolation_range)]
+    return [Data(lin_x[i], interpolate_point_lagrange(lin_x[i], data)) for i in range(interpolation_range)]
 
 
 def process(dataset: [Data]):
+    # plt.plot(
+    #     [point.x for point in dataset],
+    #     [point.y for point in dataset],
+    #     'b.',
+    #     label='raw dataset'
+    # )
+    # plt.show()
+
+    interpolated_data = interpolate_lagrange(dataset, len(dataset)*2)
+
     plt.plot(
         [point.x for point in dataset],
-        [point.y for point in dataset]
-    )
-    plt.show()
-
-    interpolated_data = interpolate_lagrange(dataset, 15)
-
-    plt.plot(
-        [point.x for point in dataset],
-        [point.y for point in dataset]
+        [point.y for point in dataset],
+        'b.',
+        label='raw dataset'
     )
     plt.plot(
         [point.x for point in interpolated_data],
-        [point.y for point in interpolated_data]
+        [point.y for point in interpolated_data],
+        'r-',
+        label='interpolated'
     )
-    plt.legend(['raw dataset', 'interpolated'])
-    plt.yscale("linear")
-    plt.xscale("linear")
+    plt.legend()
+    # plt.yscale("log")
     plt.show()
 
 
