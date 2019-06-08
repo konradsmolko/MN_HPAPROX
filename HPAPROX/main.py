@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from numpy import linspace
 
 
-def interpolate_point(data: [Data], xi):
+def interpolate_point_lagrange(data: [Data], xi):
     result: float = 0.0
     length = len(data)
     for i in range(length):
@@ -16,13 +16,13 @@ def interpolate_point(data: [Data], xi):
     return result
 
 
-def interpolate(data: [Data], interpolation_range=None) -> [Data]:
+def interpolate_lagrange(data: [Data], interpolation_range=None) -> [Data]:
     if interpolation_range is None:
         interpolation_range = len(data)
 
     lin_x = linspace(data[0].x, data[-1].x, interpolation_range)
 
-    return [Data(lin_x[i], interpolate_point(data, i)) for i in range(interpolation_range)]
+    return [Data(lin_x[i], interpolate_point_lagrange(data, i)) for i in range(interpolation_range)]
 
 
 def process(dataset: [Data]):
@@ -32,7 +32,7 @@ def process(dataset: [Data]):
     )
     plt.show()
 
-    interpolated_data = interpolate(dataset, 15)
+    interpolated_data = interpolate_lagrange(dataset, 15)
 
     plt.plot(
         [point.x for point in dataset],
