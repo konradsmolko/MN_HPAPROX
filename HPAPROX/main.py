@@ -1,10 +1,12 @@
+import os
+
 import matplotlib.pyplot as plt
 
 from HPAPROX.dataIO import read_all, read, Data
 from HPAPROX.interpolation import interpolate_splines, interpolate_lagrange
 
 
-def process(dataset: [Data]):
+def process(dataset: [Data], filename):
 	# plt.plot(
 	# 	[point.x for point in dataset],
 	# 	[point.y for point in dataset],
@@ -13,37 +15,53 @@ def process(dataset: [Data]):
 	# )
 	# plt.show()
 
-	# interpolated_data = interpolate_lagrange(dataset[::10])
-	interpolated_data = interpolate_lagrange(dataset[::25], len(dataset) * 10)
-	# interpolated_data = interpolate_splines(dataset[::10])
+	nth = 11
+	# nth = 22
 
+	method = 'lagrange '
+	interpolated_data = interpolate_lagrange(dataset[::nth], len(dataset) * 10)
+
+	# method = 'splines '
+	# interpolated_data = interpolate_splines(dataset[::nth])
+
+	plt.figure()
 	plt.plot(
 		[point.x for point in dataset],
 		[point.y for point in dataset],
 		'b-',
-		label='raw dataset'
+		label='dane zrodlowe'
+	)
+	plt.plot(
+		[point.x for point in dataset[::nth]],
+		[point.y for point in dataset[::nth]],
+		'g.',
+		label='punkty wybrane do interpolacji'
 	)
 	plt.plot(
 		[point.x for point in interpolated_data],
 		[point.y for point in interpolated_data],
 		'r-',
-		label='interpolated'
+		label='wykres interpolowany'
 	)
 	plt.legend()
 	plt.ylim(min([p.y for p in dataset]) - 10, max([p.y for p in dataset]) + 10)
 	# plt.yscale("log")
-	plt.show()
+	plt.title(method + filename + str(nth))
+	plt.savefig(method + filename + str(nth) + '.png', dpi=600)
+	# plt.show()
 
 
 def all_data():
-	data: [[Data]] = read_all()
-	for dataset in data:
-		process(dataset)
+	data = read_all()
+	folder = "./data"
+	file_list = os.listdir(folder)
+	for dataset, file in zip(data, file_list):
+		process(dataset, file)
 
 
-def single_file(filename='./data/przyk3.txt'):
-	data: [Data] = read(filename)
-	process(data)
+def single_file(filename='przyk3.txt'):
+	data, _ = read('./data/' + filename)
+	process(data, filename)
 
 
 def main():

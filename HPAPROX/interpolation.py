@@ -14,7 +14,6 @@ def interpolate_point_lagrange(xi, data: [Data]):
 				term *= (xi - data[j].x) / float(data[i].x - data[j].x)
 		result += term
 
-	# print("Interpolated point", xi, "result", result)
 	return result
 
 
@@ -23,7 +22,6 @@ def interpolate_lagrange(data: [Data], interpolation_density=None) -> [Data]:
 		interpolation_density = len(data)
 
 	lin_x = linspace(data[0].x, data[-1].x, interpolation_density)
-	# print("Max:", lin_x[-1])
 
 	return [Data(lin_x[i], interpolate_point_lagrange(lin_x[i], data)) for i in range(interpolation_density)]
 

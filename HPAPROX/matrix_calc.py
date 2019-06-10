@@ -130,11 +130,8 @@ def jacobi(matrix, b, n, cutoff) -> [list, int]:
 				x[i] = (b[i] - o)/matrix[i][i]
 
 	except OverflowError:
-		# print("ERROR: OverflowError in Jacobi method, terminating.")
 		return None, iterations
 
-	# print("ERROR: too many iterations in Jacobi method, terminating.")
-	# print("Current r:", r)
 	return None, iterations
 
 
