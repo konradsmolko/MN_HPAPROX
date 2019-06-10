@@ -13,9 +13,9 @@ def process(dataset: [Data]):
 	# )
 	# plt.show()
 
-	# interpolated_data = interpolate_lagrange(dataset)
-	# interpolated_data = interpolate_lagrange(dataset, len(dataset) * 10)
-	interpolated_data = interpolate_splines(dataset[::10])
+	# interpolated_data = interpolate_lagrange(dataset[::10])
+	interpolated_data = interpolate_lagrange(dataset[::25], len(dataset) * 10)
+	# interpolated_data = interpolate_splines(dataset[::10])
 
 	plt.plot(
 		[point.x for point in dataset],
@@ -30,6 +30,8 @@ def process(dataset: [Data]):
 		label='interpolated'
 	)
 	plt.legend()
+	plt.ylim(min([p.y for p in dataset]) - 10, max([p.y for p in dataset]) + 10)
+	# plt.yscale("log")
 	plt.show()
 
 
@@ -39,7 +41,7 @@ def all_data():
 		process(dataset)
 
 
-def single_file(filename='./data/100.txt'):
+def single_file(filename='./data/przyk3.txt'):
 	data: [Data] = read(filename)
 	process(data)
 
